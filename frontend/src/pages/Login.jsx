@@ -26,7 +26,7 @@ function Login() {
         try {
             const result = await axios.post(serverUrl + "/api/auth/login" , {email , password} ,{withCredentials:true})
             dispatch(setUserData(result.data))
-            navigate("/")
+            navigate("/allcourses")
             setLoading(false)
             toast.success("Login Successfully")
         } catch (error) {
@@ -50,7 +50,7 @@ function Login() {
                     , {withCredentials:true}
                 )
                 dispatch(setUserData(result.data))
-                navigate("/")
+                navigate("/allcourses")
                 toast.success("Login Successfully")
             } catch (error) {
                 console.log(error)

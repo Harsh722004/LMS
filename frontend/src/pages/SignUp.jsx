@@ -28,8 +28,7 @@ function SignUp() {
         try {
             const result = await axios.post(serverUrl + "/api/auth/signup" , {name , email , password , role} , {withCredentials:true} )
             dispatch(setUserData(result.data))
-
-            navigate("/")
+            navigate("/allcourses")
             toast.success("SignUp Successfully")
             setLoading(false)
         } 
@@ -53,7 +52,7 @@ function SignUp() {
                 , {withCredentials:true}
             )
             dispatch(setUserData(result.data))
-            navigate("/")
+            navigate("/allcourses")
             toast.success("SignUp Successfully")
         } catch (error) {
             console.log(error)
