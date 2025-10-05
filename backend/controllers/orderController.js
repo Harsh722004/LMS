@@ -3,13 +3,21 @@ import razorpay from 'razorpay'
 import User from "../models/userModel.js";
 import dotenv from "dotenv"
 dotenv.config()
-const razorpayInstance = new razorpay({
-    key_id: process.env.RAZORPAY_KEY_ID,
-    key_secret: process.env.RAZORPAY_SECRET,
-})
+
+let razorpayInstance = null;
+if (process.env.RAZORPAY_KEY_ID && process.env.RAZORPAY_SECRET) {
+    razorpayInstance = new razorpay({
+        key_id: process.env.RAZORPAY_KEY_ID,
+        key_secret: process.env.RAZORPAY_SECRET,
+    });
+}
 
 export const createOrder = async (req, res) => {
   try {
+    if (!razorpayInstance) {
+      return res.status(503).json({ message: "Payment service not configured" });
+    }
+
     const { courseId } = req.body;
 
     const course = await Course.findById(courseId);
@@ -34,7 +42,10 @@ export const createOrder = async (req, res) => {
 
 export const verifyPayment = async (req, res) => {
   try {
-    
+    if (!razorpayInstance) {
+      return res.status(503).json({ message: "Payment service not configured" });
+    }
+
         const {razorpay_order_id , courseId , userId} = req.body
         const orderInfo = await razorpayInstance.orders.fetch(razorpay_order_id)
         if(orderInfo.status === 'paid') {
